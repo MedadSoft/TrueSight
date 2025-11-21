@@ -1,0 +1,196 @@
+.ticket-table-container {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    /* Remove padding to let table fill container */
+    margin-top: var(--space-xl);
+    overflow: hidden;
+    /* Clip corners */
+    box-shadow: var(--shadow-sm);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
+}
+
+.table-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.view-all-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.view-all-btn:hover {
+    text-decoration: underline;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.ticket-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.ticket-table th {
+    padding: var(--space-md) var(--space-lg);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    user-select: none;
+    background-color: var(--color-bg-tertiary);
+    /* Slight background for header */
+}
+
+.ticket-table th:hover {
+    color: var(--color-text-primary);
+}
+
+.sort-icon {
+    vertical-align: middle;
+    margin-left: 4px;
+    opacity: 0.3;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.sort-icon.ascending {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.sort-icon.descending {
+    opacity: 1;
+    transform: rotate(180deg);
+}
+
+.ticket-table td {
+    padding: var(--space-md) var(--space-lg);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+
+.ticket-table tr:last-child td {
+    border-bottom: none;
+}
+
+.ticket-row {
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.ticket-row:hover td {
+    background-color: var(--color-bg-tertiary);
+}
+
+.ticket-id {
+    font-family: monospace;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.ticket-subject {
+    font-weight: 500;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.status-open {
+    background-color: rgba(56, 189, 248, 0.15);
+    color: var(--color-text-accent);
+}
+
+.status-progress {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: var(--color-warning);
+}
+
+.status-closed {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: var(--color-success);
+}
+
+/* Priority */
+.priority-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.priority-critical {
+    background-color: var(--color-danger);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.priority-high {
+    background-color: var(--color-warning);
+}
+
+.priority-medium {
+    background-color: var(--color-text-accent);
+}
+
+.priority-low {
+    background-color: var(--color-text-secondary);
+}
+
+.ticket-date {
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    padding: 6px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+}

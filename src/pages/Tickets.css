@@ -1,0 +1,7 @@
+.tickets-controls {
+    margin-bottom: var(--space-lg);
+}
+
+.tickets-page .ticket-table-container {
+    margin-top: 0;
+}

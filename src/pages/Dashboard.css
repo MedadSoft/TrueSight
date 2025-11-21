@@ -1,0 +1,10 @@
+.section-header {
+    margin-bottom: var(--space-md);
+    margin-top: var(--space-xl);
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
