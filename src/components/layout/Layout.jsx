@@ -3,13 +3,13 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import './Layout.css';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, onLogout, user }) => {
     return (
         <div className="layout">
-            <Sidebar />
-            <div className="main-wrapper">
+            <Sidebar onLogout={onLogout} user={user} />
+            <div className="main-content">
                 <Header />
-                <main className="main-content">
+                <main className="page-content">
                     {children}
                 </main>
             </div>

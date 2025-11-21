@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Calendar } from 'lucide-react';
 import './CreateTaskModal.css';
 
-const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions }) => {
+const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions, currentUser, users }) => {
     const initialFormState = {
         id: '',
         status: 'Open',
@@ -10,10 +10,25 @@ const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions
         subject: '',
         category: '',
         dueDate: '',
-        assignedBy: ''
+        assignedTo: '',
+        details: ''
     };
 
     const [formData, setFormData] = useState(initialFormState);
+
+    // Determine potential assignees based on role
+    const getPotentialAssignees = () => {
+        if (!currentUser || !users) return [];
+
+        if (currentUser.role === 'Admin') {
+            return users.filter(u => u.role === 'Finance Officer');
+        } else if (currentUser.role === 'Finance Manager') {
+            return users.filter(u => u.role === 'Finance Officer' && u.managerId === currentUser.id);
+        }
+        return [];
+    };
+
+    const potentialAssignees = getPotentialAssignees();
 
     useEffect(() => {
         if (taskToEdit) {
@@ -22,14 +37,24 @@ const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions
                 status: taskToEdit.status,
                 priority: taskToEdit.priority || 'Medium',
                 subject: taskToEdit.subject,
-                category: taskToEdit.category || '', // Handle potential missing fields
+                category: taskToEdit.category || '',
                 dueDate: taskToEdit.dueDate || '',
-                assignedBy: taskToEdit.customer // Mapping customer to assignedBy for consistency
+                assignedTo: taskToEdit.customer || '', // Mapping customer to assignedTo for now
+                details: taskToEdit.details || ''
             });
         } else {
-            setFormData(initialFormState);
+            // Default assignment logic for new tasks
+            let defaultAssignee = '';
+            if (currentUser?.role === 'Finance Officer') {
+                defaultAssignee = currentUser.id;
+            }
+
+            setFormData({
+                ...initialFormState,
+                assignedTo: defaultAssignee
+            });
         }
-    }, [taskToEdit, isOpen]);
+    }, [taskToEdit, isOpen, currentUser]);
 
     if (!isOpen) return null;
 
@@ -40,17 +65,23 @@ const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Find the name of the assigned user for display purposes (customer field)
+        const assignedUser = users?.find(u => u.id === formData.assignedTo);
+        const assignedName = assignedUser ? assignedUser.name : (currentUser?.role === 'Finance Officer' ? currentUser.name : 'Unassigned');
+
         onSave({
-            ...taskToEdit, // Keep existing fields like date if not updated
-            // ID is now handled by App.jsx for new tasks
+            ...taskToEdit,
             id: formData.id,
             subject: formData.subject,
-            customer: formData.assignedBy,
+            customer: assignedName, // Display name
+            assignedToId: formData.assignedTo, // ID for logic
             status: formData.status,
             priority: formData.priority,
             date: taskToEdit?.date || 'Just now',
             category: formData.category,
-            dueDate: formData.dueDate
+            dueDate: formData.dueDate,
+            details: formData.details
         });
         onClose();
         setFormData(initialFormState);
@@ -81,7 +112,7 @@ const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions
                                 value={formData.id}
                                 onChange={handleChange}
                                 className="form-input"
-                                disabled={true} // Always disabled
+                                disabled={true}
                             />
                         </div>
                         <div className="form-group">
@@ -168,16 +199,44 @@ const TaskModal = ({ isOpen, onClose, onSave, taskToEdit = null, dropdownOptions
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="assignedBy">Assigned By</label>
-                        <input
-                            type="text"
-                            id="assignedBy"
-                            name="assignedBy"
-                            placeholder="e.g., John Smith"
-                            value={formData.assignedBy}
+                        <label htmlFor="assignedTo">Assign to</label>
+                        {currentUser?.role === 'Finance Officer' ? (
+                            <input
+                                type="text"
+                                value={currentUser.name}
+                                className="form-input"
+                                disabled
+                            />
+                        ) : (
+                            <div className="select-wrapper">
+                                <select
+                                    id="assignedTo"
+                                    name="assignedTo"
+                                    value={formData.assignedTo}
+                                    onChange={handleChange}
+                                    className="form-select"
+                                    required
+                                >
+                                    <option value="">Select Officer</option>
+                                    {potentialAssignees.map(user => (
+                                        <option key={user.id} value={user.id}>{user.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="details">Details</label>
+                        <textarea
+                            id="details"
+                            name="details"
+                            placeholder="Enter ticket details..."
+                            value={formData.details}
                             onChange={handleChange}
-                            className="form-input"
-                            required
+                            className="form-textarea"
+                            rows="4"
+                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0', resize: 'vertical' }}
                         />
                     </div>
 

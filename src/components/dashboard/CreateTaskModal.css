@@ -19,8 +19,11 @@
     border-radius: var(--radius-lg);
     width: 100%;
     max-width: 600px;
+    max-height: 90vh;
     box-shadow: var(--shadow-lg);
     animation: slideUp 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-header {
@@ -29,6 +32,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-shrink: 0;
 }
 
 .modal-header h2 {
@@ -63,6 +67,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
+    overflow-y: auto;
 }
 
 .form-row {

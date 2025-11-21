@@ -1,9 +1,9 @@
 import React from 'react';
-import { LayoutDashboard, Ticket, Users, Settings, LogOut, Hexagon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { LayoutDashboard, Ticket, Settings, Users, LogOut } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ onLogout, user }) => {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
 
@@ -11,9 +11,9 @@ const Sidebar = () => {
         <aside className="sidebar">
             <div className="sidebar-header">
                 <div className="logo-container">
-                    <div className="logo-icon">TF</div>
-                    <span className="logo-text">TicketFlow</span>
+                    <span className="logo-text">TF</span>
                 </div>
+                <h1 className="app-title">TicketFlow</h1>
             </div>
 
             <nav className="sidebar-nav">
@@ -31,9 +31,9 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/customers" className={`nav-item ${isActive('/customers') ? 'active' : ''}`}>
+                        <Link to="/users" className={`nav-item ${isActive('/users') ? 'active' : ''}`}>
                             <Users size={20} />
-                            <span>Customers</span>
+                            <span>Users</span>
                         </Link>
                     </li>
                     <li>
@@ -46,8 +46,17 @@ const Sidebar = () => {
             </nav>
 
             <div className="sidebar-footer">
-                <button className="logout-btn">
-                    <LogOut size={20} />
+                <div className="user-info">
+                    <div className="user-avatar">
+                        {user?.name?.charAt(0) || 'U'}
+                    </div>
+                    <div className="user-details">
+                        <span className="user-name">{user?.name || 'User'}</span>
+                        <span className="user-role">{user?.role || 'Member'}</span>
+                    </div>
+                </div>
+                <button className="logout-btn" onClick={onLogout}>
+                    <LogOut size={18} />
                     <span>Logout</span>
                 </button>
             </div>
